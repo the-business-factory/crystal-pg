@@ -30,6 +30,9 @@ module PQ
           soc = UNIXSocket.new(@conninfo.host)
         else
           soc = TCPSocket.new(@conninfo.host, @conninfo.port)
+          soc.tcp_keepalive_count = 4
+          soc.tcp_keepalive_idle = 60
+          soc.tcp_keepalive_idle = 15
         end
         soc.sync = false
       rescue e
