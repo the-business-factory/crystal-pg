@@ -25,6 +25,13 @@ module PG
       Statement.new(self, query)
     end
 
+    def health_check!
+      @connection.send_sync_message
+      @connection.expect_frame PQ::Frame::ReadyForQuery
+    rescue exc : IO::Error
+      raise DB::ConnectionLost.new(self)
+    end
+
     # Execute several statements. No results are returned.
     def exec_all(query : String) : Nil
       PQ::SimpleQuery.new(@connection, query)
