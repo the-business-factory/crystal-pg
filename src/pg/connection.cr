@@ -25,7 +25,7 @@ module PG
       Statement.new(self, query)
     end
 
-    def health_check!
+    def check
       @connection.send_sync_message
       @connection.expect_frame PQ::Frame::ReadyForQuery
     rescue exc : IO::Error
